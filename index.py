@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import requests
+from connect_AI import get_country_info
 
 st.set_page_config(page_title="World Map Interactive", layout="wide")
 
@@ -58,6 +59,14 @@ st.sidebar.subheader(f"🌐 {selected_country}")
 st.sidebar.write(f"**Mã quốc gia (ISO3):** `{country_data['code']}`")
 st.sidebar.write(f"**GDP (tỷ USD):** {country_data['gdp_billion']:.2f}")
 st.sidebar.write(f"**Tọa độ:** ({lat:.2f}, {lon:.2f})")
+
+# Thêm phần thông tin từ AI với button
+st.sidebar.subheader("🤖 Thông tin từ AI")
+if st.sidebar.button("Tìm hiểu thêm về quốc gia này"):
+    with st.sidebar:
+        with st.spinner('Đang tải thông tin...'):
+            ai_info = get_country_info(selected_country)
+            st.write(ai_info)
 
 st.subheader("Toàn bộ dữ liệu 'gapminder' năm 2007")
 st.dataframe(merged_df)
