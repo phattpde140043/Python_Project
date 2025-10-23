@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import os
-genai.configure(api_key="AIzaSyCt7SA9C68l5XhR3MKtg8-8DSRVE_1fqrc")
+genai.configure(api_key="AIzaSyAm0K7ewFxMdOjFrJWgv6uuzHgB8UhEDzs")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 def list_available_models():
     try:
