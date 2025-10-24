@@ -3,6 +3,32 @@ import sqlite3
 import pandas as pd
 import json
 
+# Danh sách mã ISO3 hợp lệ (một phần, dựa trên tiêu chuẩn ISO 3166-1 alpha-3)
+valid_iso3_codes ={'DZA', 'BEL', 'GNB', 'HUN', 'NLD', 'BWA', 'BLZ', 'HKG','FIN', 'MLT', 'ARM', 'MNE', 'MNG', 'AUS',
+                    'SWZ', 'MRT','URY', 'BIH', 'MDG', 'BRB', 'ECU', 'CAF', 'SUR', 'OMN','GIN', 'MAR', 'KHM', 'SWE',
+                    'LVA', 'TJK', 'MWI', 'PRT','USA', 'HND', 'PHL', 'SDN', 'NPL', 'TKM', 'IRL', 'SOM','BOL', 'GMB',
+                    'LBR', 'UKR', 'IRN', 'LUX', 'AUT', 'GEO', 'NIC', 'LBN', 'AGO', 'COD', 'ISR', 'CHE', 'THA', 'RUS',
+                    'QAT', 'TTO', 'ITA', 'PRI', 'TLS', 'TZA', 'COL', 'ALB','ROU', 'COM', 'DNK', 'MDA', 'SRB', 'KEN',
+                    'GBR', 'KGZ','GTM', 'JAM', 'KOR', 'COG', 'CYP', 'CHN', 'MDV', 'SYR','PSE', 'IND', 'ZAF', 'STP',
+                    'PAK', 'SVN', 'POL', 'LTU','ESP', 'ARG', 'GRC', 'REU', 'HTI', 'CRI', 'SAU', 'GAB','NZL', 'SVK',
+                    'NER', 'LBY', 'EGY', 'ERI', 'SLV', 'SEN','BEN', 'CHL', 'MLI', 'BTN', 'SLE', 'MKD', 'PRY', 'NOR',
+                    'DEU', 'JOR', 'KWT', 'BGD', 'ARE', 'YEM', 'HRV', 'LSO','ZMB', 'MOZ', 'VNM', 'ETH', 'NAM', 'TUN',
+                    'AZE', 'LKA','CZE', 'PAN', 'LAO', 'GHA', 'BLR', 'PER', 'AFG', 'LIE','BRA', 'DOM', 'IDN', 'IRQ',
+                    'BGR', 'BDI', 'FRA', 'BFA','UZB', 'RWA', 'EST', 'VEN', 'CMR', 'CUB', 'MMR', 'TWN','KAZ', 'TUR',
+                    'FJI', 'BHR', 'TCD', 'PNG', 'SGP', 'CIV','MEX', 'GUY', 'NGA', 'CAN', 'MUS', 'MYS', 'JPN', 'ISL',
+                    'TGO', 'AND', 'UGA', 'ZWE', 'DJI', 'GNQ'}
+
+geo_regions = ["EAS", "ECS", "LCN", "MEA", "NAC", "SAS", "SSF"]
+
+# Ánh xạ tên cột sang tiếng Việt
+indicator_mapping = {
+    "gdp_billion": "Tổng GDP (tỷ USD)",
+    "population": "Dân số",
+    "gdp_per_capita": "GDP bình quân đầu người (USD)",
+    "unemployment_rate": "Tỷ lệ thất nghiệp (%)",
+    "inflation_rate": "Tỷ lệ lạm phát (%)"
+}
+
 def get_country_data():
     """
     Lấy dữ liệu quốc gia (name, latlng, cca3) từ REST Countries API.

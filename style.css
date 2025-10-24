@@ -11,28 +11,28 @@
     top: 0;
     z-index: 100;
 }
-        .main .block-container {
-            padding-top: 0rem !important;  /* Xóa padding phía trên */
-            padding-bottom: 0rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            margin-top: 0rem !important;  /* Xóa margin phía trên */
-        }
-        .stPlotlyChart {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-        .stSelectbox {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-        .stMarkdown {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-        div[data-testid="stApp"] {
-            padding-top: 0rem !important;  /* Đảm bảo không có padding ở cấp ứng dụng */
-        }
+.main .block-container {
+    padding-top: 0rem !important;  /* Xóa padding phía trên */
+    padding-bottom: 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 0rem !important;  /* Xóa margin phía trên */
+}
+.stPlotlyChart {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.stSelectbox {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.stMarkdown {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+div[data-testid="stApp"] {
+    padding-top: 0rem !important;  /* Đảm bảo không có padding ở cấp ứng dụng */
+}
     
 .headbar-title {
     font-size: 24px;
