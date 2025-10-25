@@ -20,6 +20,17 @@ valid_iso3_codes ={'DZA', 'BEL', 'GNB', 'HUN', 'NLD', 'BWA', 'BLZ', 'HKG','FIN',
 
 geo_regions = ["EAS", "ECS", "LCN", "MEA", "NAC", "SAS", "SSF"]
 
+income_groups = [
+    "HIC",  # High income
+    "UMC",  # Upper middle income
+    "MIC",  # Middle income
+    "LMC",  # Lower middle income
+    "LIC",  # Low income
+    "LMY",  # Low & middle income
+    "LDC",  # Least developed countries (UN)
+    "HPC",  # Heavily indebted poor countries
+]
+
 # Ánh xạ tên cột sang tiếng Việt
 indicator_mapping = {
     "gdp_billion": "Tổng GDP (tỷ USD)",
