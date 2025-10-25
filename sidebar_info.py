@@ -3,7 +3,7 @@
 # ===============================
 import streamlit as st
 import pandas as pd
-from api_utils import get_sample_country_info_api
+from api_utils import get_sample_country_info_api,get_country_info_detail
 
 
 def render_sidebar(merged_df):
@@ -32,7 +32,7 @@ def render_sidebar(merged_df):
     iso3_code = country_data["code"]
 
     # --- Lấy dữ liệu chi tiết từ API ---
-    country_info = get_sample_country_info_api(country_data["code"])
+    country_info = get_country_info_detail(country_data["code"])
 
     # --- Hiển thị thông tin chi tiết ---
     st.sidebar.subheader(f"🌍 {selected_country}")

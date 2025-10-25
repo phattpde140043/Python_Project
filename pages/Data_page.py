@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 from api_utils import (
     get_country_data, get_country_info_api, get_sample_country_info_api,
-    get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3
+    get_country_info_map, valid_iso3_codes, indicator_mapping, geo_regions,get_country_indicator_info
 )
 from sidebar_info import render_sidebar
 from connect_AI import get_country_info
@@ -29,7 +29,7 @@ st.divider()  # tạo một đường kẻ ngang (Streamlit 1.22+)
 # =========================
 def process_country_data():
     """Lấy dữ liệu từ DB và phân loại hợp lệ / bị loại."""
-    data = get_db_countries()
+    data = get_country_info_map()
     valid, excluded = [], []
 
     for country in data:
@@ -85,9 +85,7 @@ if selected_country:
             st.session_state.ai_info = ai_info
     st.write(st.session_state.get("ai_info", ""))
 
-    country_data = get_country_data_by_iso3(iso3_code=iso3_code)
-
-    st.write(country_data)
+    country_data = get_country_indicator_info(iso_code=iso3_code)
 
     for indicator_code, indicator_data in country_data["data"].items():
         # Chuẩn bị DataFrame cho từng indicator

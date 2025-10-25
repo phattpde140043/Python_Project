@@ -2,8 +2,8 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from api_utils import (
-    get_country_data, get_country_info_api, get_sample_country_info_api,
-    get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3
+    get_country_data, get_country_info_api, get_sample_country_info_api,get_country_info_map,
+    valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3
 )
 
 
@@ -39,7 +39,7 @@ except FileNotFoundError:
 # =========================
 def process_country_data():
     """Lấy dữ liệu từ DB và phân loại hợp lệ / bị loại."""
-    data = get_db_countries()
+    data = get_country_info_map()
     valid, excluded = [], []
 
     for country in data:
