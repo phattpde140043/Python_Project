@@ -3,8 +3,8 @@ import plotly.express as px
 import pandas as pd
 import time
 from api_utils import (
-    get_country_data, get_country_info_api, get_sample_country_info_api,
-    get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions, get_country_data_by_iso3
+    get_country_data, get_country_info_api, get_sample_country_info_api,get_country_info_map,
+    valid_iso3_codes, indicator_mapping, geo_regions, get_country_data_by_iso3
 )
 from sidebar_info import render_sidebar
 from data_processor import data_processor
@@ -285,5 +285,4 @@ if selected_country:
 
         st.success("Hoàn tất phân tích mở rộng!")
 else:
-    st.sidebar.warning("Không có dữ liệu quốc gia trong database")
-    st.info("⬅️ Hãy chọn một quốc gia ở thanh bên để xem dữ liệu chi tiết.")
+    st.info("Hãy chọn một quốc gia ở thanh bên để xem dữ liệu chi tiết.")
