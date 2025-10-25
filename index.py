@@ -5,8 +5,15 @@ from api_utils import (
     get_country_data, get_country_info_api, get_sample_country_info_api,
     get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions
 )
-from sidebar_info import render_sidebar
 
+
+# Ẩn sidebar mặc định của Streamlit multi-page app
+st.markdown("""
+    <style>
+        section[data-testid="stSidebar"] {display: none;}
+        div[data-testid="collapsedControl"] {display: none;}
+    </style>
+""", unsafe_allow_html=True)
 
 # =========================
 # 🔧 CẤU HÌNH GIAO DIỆN
@@ -265,12 +272,3 @@ if not excluded_df.empty:
     excluded_display = format_df(excluded_df)
     st.dataframe(excluded_display, use_container_width=True, height=400)
 
-# =========================
-# 🧭 SIDEBAR
-# =========================
-selected_country, lat, lon = render_sidebar(merged_df)
-
-# Zoom bản đồ nếu có tọa độ
-if pd.notna(lat) and pd.notna(lon):
-    fig.update_geos(center={"lat": lat, "lon": lon}, projection_scale=4)
-    fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})

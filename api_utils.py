@@ -149,3 +149,50 @@ def get_db_countries():
     )
     conn.close()
     return json_data
+
+
+def get_country_data_by_iso3(iso3_code: str):
+    conn = sqlite3.connect("worldbank.db")
+    query = """
+    SELECT 
+        countries.iso_code,
+        countries.name AS country_name,
+        country_data.indicator_code,
+        indicators.name AS indicator_name,
+        country_data.year,
+        country_data.value,
+        country_data.last_updated
+    FROM country_data
+    JOIN countries ON countries.iso2_code = country_data.country_code
+    LEFT JOIN indicators ON indicators.code = country_data.indicator_code
+    WHERE countries.iso_code = ?
+    """
+    df = pd.read_sql(query, conn, params=(iso3_code,))
+    conn.close()
+
+    if df.empty:
+        return {
+            "country_code": iso3_code,
+            "country_name": None,
+            "data": {}
+        }
+
+    data_dict = {}
+    for indicator, group in df.groupby("indicator_code"):
+        indicator_name = group["indicator_name"].iloc[0]  # lấy tên đầy đủ từ bảng indicators
+        data_dict[indicator] = {
+            "indicator_code": indicator,
+            "indicator_name": indicator_name,
+            "data": [
+                {"year": int(row["year"]), "value": float(row["value"])}
+                for _, row in group.iterrows()
+            ]
+        }
+
+    result = {
+        "country_code": iso3_code,
+        "country_name": df["country_name"].iloc[0],
+        "data": data_dict
+    }
+
+    return result

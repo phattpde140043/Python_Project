@@ -3,28 +3,38 @@
 # ===============================
 import streamlit as st
 import pandas as pd
-from connect_AI import get_country_info
 from api_utils import get_sample_country_info_api
 
 
 def render_sidebar(merged_df):
-    """Hiển thị sidebar thông tin quốc gia + AI"""
+    """Hiển thị sidebar thông tin quốc gia + AI (phiên bản có lazy loading)"""
 
     # --- Header ---
     st.sidebar.header("Thông tin quốc gia")
 
     # --- Dropdown chọn quốc gia ---
+    country_list = merged_df["country_name"].sort_values().tolist()
     selected_country = st.sidebar.selectbox(
         "Chọn quốc gia",
-        merged_df["country_name"].sort_values()
+        options=["-- Chọn quốc gia --"] + country_list,
+        index=0
     )
 
-    # --- Lấy dữ liệu quốc gia ---
+    # Nếu chưa chọn (vẫn ở placeholder)
+    if selected_country == "-- Chọn quốc gia --":
+        st.sidebar.info("⬅️ Vui lòng chọn một quốc gia để xem thông tin chi tiết.")
+        return None, None
+
+    # ===============================
+    # 🧭 Khi người dùng đã chọn quốc gia
+    # ===============================
     country_data = merged_df[merged_df["country_name"] == selected_country].iloc[0]
-    lat, lon = country_data["latitude"], country_data["longitude"]
+    iso3_code = country_data["code"]
+
+    # --- Lấy dữ liệu chi tiết từ API ---
+    country_info = get_sample_country_info_api(country_data["code"])
 
     # --- Hiển thị thông tin chi tiết ---
-    country_info = get_sample_country_info_api(country_data["code"])
     st.sidebar.subheader(f"🌍 {selected_country}")
 
     if "error" not in country_info:
@@ -54,13 +64,5 @@ def render_sidebar(merged_df):
     else:
         st.sidebar.error(country_info["error"])
 
-    # --- AI Information ---
-    st.sidebar.subheader("🤖 Thông tin từ AI")
-    if st.sidebar.button("Tìm hiểu thêm về quốc gia này"):
-        with st.sidebar:
-            with st.spinner("Đang tải thông tin..."):
-                ai_info = get_country_info(selected_country)
-                st.write(ai_info)
-
-    # Trả về kết quả (để main có thể dùng zoom bản đồ)
-    return selected_country, lat, lon
+    # --- Trả về kết quả cho main page ---
+    return selected_country, iso3_code
