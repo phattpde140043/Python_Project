@@ -22,14 +22,14 @@ st.set_page_config(page_title="World Map Interactive", layout="wide")
 
 # CSS
 try:
-    with open("style.css", "r") as css_file:
+    with open("style.css", "r",encoding="utf-8") as css_file:
         st.markdown(f"<style>{css_file.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
     st.warning("⚠️ Không tìm thấy file `style.css`.")
 
 # Header HTML
 try:
-    with open("header.html", "r") as html_file:
+    with open("header.html", "r",encoding="utf-8") as html_file:
         st.markdown(html_file.read(), unsafe_allow_html=True)
 except FileNotFoundError:
     st.warning("⚠️ Không tìm thấy file `header.html`.")

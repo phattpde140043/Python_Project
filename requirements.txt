@@ -35,3 +35,6 @@ tornado==6.5.2
 typing_extensions==4.15.0
 tzdata==2025.2
 urllib3==2.5.0
+groq>=0.3.0
+python-dotenv
+
