@@ -196,3 +196,42 @@ def get_country_data_by_iso3(iso3_code: str):
     }
 
     return result
+
+def get_country_info_map():
+    url = "http://127.0.0.1:5000/country_info/map"
+    try:
+        # Gửi yêu cầu GET tới API
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Báo lỗi nếu status_code != 200
+
+        data = response.json()
+        # Trả về JSON
+        return data
+    except requests.exceptions.RequestException as e:
+        return {}
+    
+def get_country_info_detail(iso_code):
+    url = "http://127.0.0.1:5000/countries_info/"+iso_code
+    try:
+        # Gửi yêu cầu GET tới API
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Báo lỗi nếu status_code != 200
+
+        data = response.json()
+        # Trả về JSON
+        return data
+    except requests.exceptions.RequestException as e:
+        return {}
+    
+def get_country_indicator_info(iso_code):
+    url = "http://127.0.0.1:5000/country_info/map/"+iso_code
+    try:
+        # Gửi yêu cầu GET tới API
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Báo lỗi nếu status_code != 200
+
+        data = response.json()
+        # Trả về JSON
+        return data
+    except requests.exceptions.RequestException as e:
+        return {}

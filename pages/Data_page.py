@@ -33,7 +33,7 @@ st.divider()
 # =========================
 def process_country_data():
     """Lấy dữ liệu từ DB và phân loại hợp lệ / bị loại."""
-    data = get_db_countries()
+    data = get_country_info_map()
     valid, excluded = [], []
 
     for country in data:
