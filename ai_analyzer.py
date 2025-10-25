@@ -1,9 +1,11 @@
 from groq import Groq
 import os
 from data_processor import data_processor
+from dotenv import load_dotenv
 
+load_dotenv() 
 # Cấu hình API key cho Groq
-os.environ['GROQ_API_KEY'] = "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"
+os.environ['GROQ_API_KEY'] = os.getenv("GROQ_API_KEY")
 
 class AIAnalyzer:
     def __init__(self):
