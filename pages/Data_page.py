@@ -87,6 +87,8 @@ if selected_country:
 
     country_data = get_country_data_by_iso3(iso3_code=iso3_code)
 
+    st.write(country_data)
+
     for indicator_code, indicator_data in country_data["data"].items():
         # Chuẩn bị DataFrame cho từng indicator
         df = pd.DataFrame(indicator_data["data"])

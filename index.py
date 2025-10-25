@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 from api_utils import (
     get_country_data, get_country_info_api, get_sample_country_info_api,
-    get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions
+    get_db_countries, valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3
 )
 
 
@@ -265,6 +265,88 @@ if not income_df.empty:
 
 else:
     st.info("Không có nhóm thu nhập trong dữ liệu bị loại.")
+
+if not income_df.empty:
+    st.markdown("### 💹 So sánh tăng trưởng các chỉ số kinh tế theo **nhóm thu nhập**")
+
+    # Bước 1: Lấy dữ liệu chi tiết từng quốc gia
+    all_records = []
+    for _, row in income_df.iterrows():
+        iso3 = row["code"]
+        country_name = row["country_name"]
+        income_group = row.get("income_group", "Không xác định")
+
+        country_data = get_country_data_by_iso3(iso3_code=iso3)
+        if not country_data["data"]:
+            continue
+
+        # Lưu dữ liệu từng chỉ số của quốc gia
+        for indicator_code, indicator_data in country_data["data"].items():
+            for entry in indicator_data["data"]:
+                all_records.append({
+                    "year": entry["year"],
+                    "value": entry["value"],
+                    "indicator": indicator_code,
+                    "country_name": country_name,
+                    "income_group": income_group
+                })
+            
+    # Bước 2: Gom dữ liệu lại
+    if not all_records:
+        st.warning("Không có dữ liệu chỉ số nào khả dụng để hiển thị.")
+    else:
+        df_all = pd.DataFrame(all_records)
+
+        # Kiểm tra dữ liệu
+        if "income_group" not in df_all.columns:
+            st.error("❌ Thiếu cột 'income_group' trong dữ liệu. Hãy đảm bảo income_df có trường này.")
+        else:
+            # Tính giá trị trung bình mỗi nhóm theo từng năm và từng chỉ số
+            grouped = (
+                df_all.groupby(["year", "country_name", "indicator"], as_index=False)
+                .agg({"value": "mean"})
+            )
+
+            # Bước 3: Vẽ biểu đồ cho từng chỉ số
+            indicators = grouped["indicator"].unique()
+
+            for ind in indicators:
+                sub_df = grouped[grouped["indicator"] == ind]
+
+                # Lấy tên đầy đủ nếu có mapping
+                indicator_name = indicator_mapping.get(ind, ind)
+
+                fig = px.line(
+                    sub_df,
+                    x="year",
+                    y="value",
+                    color="country_name",  # mỗi nhóm thu nhập = 1 đường
+                    markers=True,
+                    title=f"📈 {indicator_name} theo nhóm thu nhập (Trung bình theo năm)",
+                    labels={
+                        "year": "Năm",
+                        "value": "Giá trị trung bình",
+                        "income_group": "Nhóm thu nhập"
+                    }
+                )
+
+                # Tùy chỉnh hiển thị
+                fig.update_traces(mode="lines+markers", line=dict(width=2))
+                fig.update_layout(
+                    legend_title_text="Nhóm thu nhập",
+                    hovermode="x unified"
+                )
+
+                # Hiển thị chart
+                st.plotly_chart(fig, use_container_width=True)
+
+            # Bảng dữ liệu tổng hợp
+            st.markdown("#### 📋 Dữ liệu trung bình theo năm & nhóm thu nhập")
+            st.dataframe(
+                grouped.style.format({"value": "{:,.2f}"}),
+                use_container_width=True
+            )
+
 
 # Bảng dữ liệu bị loại
 if not excluded_df.empty:
