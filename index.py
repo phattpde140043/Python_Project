@@ -2,8 +2,8 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from api_utils import (
-    get_country_data, get_country_info_api, get_sample_country_info_api,get_country_info_map,
-    valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3
+    get_sample_country_info_api,get_country_info_map,
+    valid_iso3_codes, indicator_mapping, geo_regions,get_country_data_by_iso3,income_groups
 )
 
 
@@ -206,16 +206,7 @@ else:
 # =========================
 # 💰 NHÓM THU NHẬP / PHÁT TRIỂN KINH TẾ
 # =========================
-income_groups = [
-    "HIC",  # High income
-    "UMC",  # Upper middle income
-    "MIC",  # Middle income
-    "LMC",  # Lower middle income
-    "LIC",  # Low income
-    "LMY",  # Low & middle income
-    "LDC",  # Least developed countries (UN)
-    "HPC",  # Heavily indebted poor countries
-]
+
 
 income_df = excluded_df[excluded_df["code"].isin(income_groups)]
 
@@ -340,16 +331,10 @@ if not income_df.empty:
                 # Hiển thị chart
                 st.plotly_chart(fig, use_container_width=True)
 
-            # Bảng dữ liệu tổng hợp
-            st.markdown("#### 📋 Dữ liệu trung bình theo năm & nhóm thu nhập")
-            st.dataframe(
-                grouped.style.format({"value": "{:,.2f}"}),
-                use_container_width=True
-            )
-
 
 # Bảng dữ liệu bị loại
 if not excluded_df.empty:
+    excluded_df = excluded_df[~excluded_df["code"].isin(geo_regions + income_groups)]
     st.subheader("🚫 Dữ liệu bị loại (không ánh xạ được quốc gia)")
     excluded_display = format_df(excluded_df)
     st.dataframe(excluded_display, use_container_width=True, height=400)
